@@ -3,14 +3,11 @@ from bs4 import BeautifulSoup
 import requests
 
 
+today = datetime.datetime.now().day
 URL = 'http://www.crous-grenoble.fr/restaurant/ru-barnave-etudiant/'
 
 
 class HTTPError(Exception):
-    pass
-
-
-class DayNotFoundError(Exception):
     pass
 
 
@@ -28,22 +25,27 @@ def extract_week_menu(page):
     return menu
 
 
-def get_today_menu(menu):
-    today = datetime.datetime.now().day
+def process_menu(menu):
+    result = []
     for entry in menu:
         title = entry.find('h3').contents
         assert len(title) == 1
         title = title[0]
-        if str(today) in title:
-            return entry
-    raise DayNotFoundError('Could not find day %d in the menu' % today)
+        items = []
+        for item in entry.find_all('li'):
+            item = item.contents
+            assert len(item) == 1
+            items.append(item[0])
+        result.append((title, items))
+    return result
 
 
-def pretty_day_menu(menu):
-    for entry in menu.find_all('li'):
-        entry = entry.contents
-        print(entry[0])
+def pretty_menu(menu):
+    for title, items in menu:
+        if len(items) > 0:
+            print(title)
+            print('\n'.join(items))
 
 
 if __name__ == '__main__':
-    pretty_day_menu(get_today_menu(extract_week_menu(get_page())))
+    pretty_menu(process_menu(extract_week_menu(get_page())))
