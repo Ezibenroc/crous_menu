@@ -1,5 +1,6 @@
 import datetime
 from bs4 import BeautifulSoup
+import colorama
 import requests
 
 
@@ -40,11 +41,32 @@ def process_menu(menu):
     return result
 
 
-def pretty_menu(menu):
+def title_to_date(title):
+    def month_number(month):
+        months = ['janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet',
+                  'aout', 'septembre', 'octobre', 'novembre', 'decembre'
+                  ]
+        return months.index(month) + 1
+    date = title.split()[-3:]
+    try:
+        y = int(date[2])
+        m = month_number(date[1])
+        d = int(date[0])
+        return datetime.date(y, m, d)
+    except ValueError:
+        raise ValueError('Could not recognize the string "%s" as a date' % ' '.join(date))
+
+
+def pretty_menu(menu, highlight_today=True):
+    highlight_str = colorama.Fore.BLACK + colorama.Back.WHITE + colorama.Style.BRIGHT
     for title, items in menu:
         if len(items) > 0:
-            print(title)
-            print('\n'.join(items))
+            entries = [title] + items
+            if highlight_today and title_to_date(title) == datetime.datetime.today().date():
+                max_l = max([len(e) for e in entries])
+                entries = [highlight_str + e.ljust(max_l) + colorama.Style.RESET_ALL for e in entries]
+            entry = '\n'.join(entries)
+            print(entry)
 
 
 if __name__ == '__main__':
