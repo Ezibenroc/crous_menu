@@ -69,5 +69,9 @@ def pretty_menu(menu, highlight_today=True):
             print(entry)
 
 
-if __name__ == '__main__':
+def main():
     pretty_menu(process_menu(extract_week_menu(get_page())))
+
+
+if __name__ == '__main__':
+    main()

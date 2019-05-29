@@ -1,2 +1,5 @@
 .mypy_cache
 Pipfile.lock
+build
+*.egg-info
+dist
