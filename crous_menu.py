@@ -35,8 +35,8 @@ def process_menu(menu):
         items = []
         for item in entry.find_all('li'):
             item = item.contents
-            assert len(item) == 1
-            items.append(item[0])
+            if len(item) == 1:
+                items.append('- %s' % item[0])
         result.append((title, items))
     return result
 
