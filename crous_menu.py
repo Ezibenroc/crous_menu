@@ -43,8 +43,8 @@ def process_menu(menu):
 
 def title_to_date(title):
     def month_number(month):
-        months = ['janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet',
-                  'aout', 'septembre', 'octobre', 'novembre', 'decembre'
+        months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet',
+                  'août', 'septembre', 'octobre', 'novembre', 'décembre'
                   ]
         return months.index(month) + 1
     date = title.split()[-3:]
